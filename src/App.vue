@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 import NavBar from './components/navbar'
 
 export default {

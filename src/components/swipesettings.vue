@@ -36,10 +36,23 @@
         uid: firebase.auth().currentUser.uid
       }
     },
+
+    mounted() {
+      this.getStatus();
+    },
+
     methods: {
       updateSharing() {
-        db.collection('users').doc(firebase.auth().currentUser.uid).set({
+        db.collection('users').doc(firebase.auth().currentUser.uid).update({
           sharing: !this.sharing
+        })
+      },
+
+      getStatus() {
+        db.collections('users').doc(firebase.auth().currentUser.uid).get().then({
+          function(doc) {
+            this.sharing = doc.data().sharing
+          }
         })
       }
     }

@@ -6,7 +6,7 @@
             xs12
             md4
           >
-            <h2>Register</h2>
+            <h2 class="text-xs-center">Register</h2>
             <v-text-field
               v-model="email"
               label="E-mail"
@@ -22,7 +22,7 @@
             <v-btn
               type="submit"
               v-on:click="register" 
-              color="light-blue"
+              color="light-blue lighten-3"
             >
               Submit
             </v-btn>

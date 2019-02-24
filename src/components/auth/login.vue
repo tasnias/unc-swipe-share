@@ -28,7 +28,7 @@
             xs12
             md4
           >
-            <h2>Login</h2>
+            <h2 class="text-xs-center">Login</h2>
             <v-text-field
               v-model="email"
               label="E-mail"
@@ -42,9 +42,10 @@
               required
             ></v-text-field>
             <v-btn
+            
               type="submit"
               v-on:click="login" 
-              color="light-blue"
+              color="light-blue lighten-3"
             >
               Submit
             </v-btn>

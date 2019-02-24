@@ -2,7 +2,7 @@
   <div id="findpeople">
         {{this.uid}}
         <ul id="sharinglist">
-            <li v-for="person in sharinglist" :key="person.id">
+            <li v-for="person in sharinglist" :key="person.email">
                 Email: {{ person.email }}
                 <br>
                 Sharing? {{ person.sharing}}
