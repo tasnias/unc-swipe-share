@@ -22,7 +22,7 @@
             <v-btn
               type="submit"
               v-on:click="register" 
-              color="light-blue lighten-3"
+              color="light-blue darken-3 white--text"
             >
               Submit
             </v-btn>
@@ -47,7 +47,10 @@
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
           alert(`Account created for ${user.user.email}`)
-          this.$router.push('/')
+          this.$router.push('/swipesettings')
+        },
+        () => {
+          
         },
         err => {
           alert(err.message)

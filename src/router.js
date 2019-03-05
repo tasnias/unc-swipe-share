@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import SwipeSettings from '@/components/swipesettings'
-import Login from '@/components/auth/login'
-import Register from '@/components/auth/register'
-import Recover from '@/components/auth/recover'
+import SwipeSettings from '@/views/swipesettings'
+import Login from '@/views/auth/login'
+import Register from '@/views/auth/register'
+import Recover from '@/views/auth/recover'
 import firebase from 'firebase'
-import FindPeople from '@/components/findpeople'
+import FindPeople from '@/views/findpeople'
 
 Vue.use(Router)
 

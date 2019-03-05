@@ -1,26 +1,5 @@
 <template>
-  <!--<div id="login" class="container">
-    <div class = "row">
-      <div class="login lighten-4 center">
-        <h3>Login</h3>
-        <form>
-          <div class = "input-field">
-            <i class="material-icons prefix">email</i>
-            <label for="email">Email</label>
-            <input type="text" id="email" v-model="email">
-          </div>
 
-          <div class = "input-field">
-            <i class="material-icons prefix">lock</i>
-            <input type="password" id="password" v-model="password">
-            <label for="password">Password</label>
-          </div>
-          <button v-on:click="login" class="btn btn-large light-blue darken-4 white-text waves-effect waves-light">Login</button>
-        </form>
-      </div>
-    </div>
-  </div>-->
-  
     <v-form v-model="valid">
       <v-container>
         <v-layout justify-center align-center>
@@ -41,14 +20,13 @@
               :type="'password'"
               required
             ></v-text-field>
-            <v-btn
-            
-              type="submit"
-              v-on:click="login" 
-              color="light-blue lighten-3"
-            >
-              Submit
-            </v-btn>
+              <v-btn
+                type="submit"
+                v-on:click="login" 
+                color="light-blue darken-3 white--text"
+              >
+                Submit
+              </v-btn>            
           </v-flex>
         </v-layout>
       </v-container>
@@ -57,7 +35,7 @@
 
 <script>
   import firebase from 'firebase'
-  import db from '../firebaseInit'
+  import db from '../../components/firebaseInit'
   export default {
     name: 'login',
     data: function() {
@@ -70,10 +48,10 @@
       login: function (e) {
         firebase.auth().signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          db.collection('users').doc(user.user.uid).set({
+          db.collection('users').doc(user.user.uid).update({
             email: user.user.email
           })
-          this.$router.push('/swipesettings')
+          this.$router.push('/')
         },
         err => {
           alert(err.message)
