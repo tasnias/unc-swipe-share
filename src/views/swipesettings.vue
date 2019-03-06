@@ -83,6 +83,11 @@
         db.collection('users').doc(firebase.auth().currentUser.uid).update({
           sharing: this.sharing
         });
+
+        let show = this.sharing || this.requesting;
+        db.collection('users').doc(firebase.auth().currentUser.uid).update({
+          show: show
+        });
       },
 
       updateRamsTimes() {
@@ -101,6 +106,11 @@
       updateRequesting() {
         db.collection('users').doc(firebase.auth().currentUser.uid).update({
           requesting: this.requesting
+        });
+
+        let show = this.sharing || this.requesting;
+        db.collection('users').doc(firebase.auth().currentUser.uid).update({
+          show: show
         });
       },
 

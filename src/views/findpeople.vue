@@ -41,9 +41,9 @@
         
         beforeMount() {
             /*this.getPeople("sharing", this.sharinglist);
-            this.getPeople("requesting", this.requestinglist);*/
-            this.getPeople("sharing", this.sharinglist);
             this.getPeople("requesting", this.requestinglist);
+            this.getPeople("sharing", this.peoplelist);*/
+            this.getPeople("show", this.peoplelist);
         },
 
         methods: {
