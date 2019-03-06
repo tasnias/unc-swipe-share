@@ -1,5 +1,13 @@
 <template>
   <div id="swipesettings">
+    <v-progress-circular
+      indeterminate
+      :size="70"
+      color="primary"
+      v-if="loading"
+    ></v-progress-circular>
+
+
     <h3>Share a Swipe</h3>
       <v-switch v-model="sharing" label="Share" @change="updateSharing" color="light-blue darken-2"></v-switch>
       <v-switch v-model="requesting" label="Request" color="light-blue darken-2" @change="updateRequesting"></v-switch>
@@ -68,10 +76,22 @@
         lenoirtimes: ["Tue 11:00am-11:30am"],
         rams: false,
         ramstimes: [],
+        loading: false,
       }
     },
 
-    beforeRouteEnter (to, from, next) {
+    mounted() {
+      this.getStatus();
+    },
+    
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.getStatus();
+        next();
+      })
+    },
+
+    beforeRouteUpdate (to, from, next) {
       next(vm => {
         vm.getStatus();
         next();
@@ -115,11 +135,14 @@
       },
 
       getStatus() {
-        /*alert("here")*/
-        db.collections('users').doc(firebase.auth().currentUser.uid).get().then({
-          function(doc) {
-            this.sharing = doc.data().sharing
+        this.loading = false;
+        db.collection('users').doc(this.uid).get()
+        .then(
+          doc => {
+            this.sharing = doc.data().sharing;
+            this.requesting = doc.data().requesting;
           }
+        ).catch(err => {
         })
       }
     }

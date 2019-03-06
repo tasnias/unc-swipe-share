@@ -33,16 +33,11 @@
         data () {
             return {
                 uid: firebase.auth().currentUser.uid,
-                sharinglist: [],
-                requestinglist:[],
                 peoplelist: [],
             }
         },
         
         beforeMount() {
-            /*this.getPeople("sharing", this.sharinglist);
-            this.getPeople("requesting", this.requestinglist);
-            this.getPeople("sharing", this.peoplelist);*/
             this.getPeople("show", this.peoplelist);
         },
 
@@ -73,7 +68,6 @@
                     });
                 });
             },
-
         }
     }
 </script>
