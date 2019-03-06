@@ -1,5 +1,5 @@
 <template>
-
+    
     <v-form v-model="valid">
       <v-container>
         <v-layout justify-center align-center>
@@ -23,6 +23,7 @@
               <v-btn
                 type="submit"
                 v-on:click="login" 
+                dark
                 color="light-blue darken-3 white--text"
               >
                 Submit

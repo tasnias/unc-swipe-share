@@ -4,8 +4,8 @@ import SwipeSettings from '@/views/swipesettings'
 import Login from '@/views/auth/login'
 import Register from '@/views/auth/register'
 import Recover from '@/views/auth/recover'
-import firebase from 'firebase'
 import FindPeople from '@/views/findpeople'
+import firebase from 'firebase'
 
 Vue.use(Router)
 
