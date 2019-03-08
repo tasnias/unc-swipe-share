@@ -12,7 +12,7 @@
       <v-switch v-model="sharing" label="Share" @change="updateSharing" color="light-blue darken-2"></v-switch>
       <v-switch v-model="requesting" label="Request" color="light-blue darken-2" @change="updateRequesting"></v-switch>
 
-    <h3>I can swipe someone it at...</h3>
+    <h3>I can swipe someone in at...</h3>
       <v-checkbox label="Lenoir Dining Hall" v-model="lenoir" color="light-blue darken-3"></v-checkbox>
       <v-combobox
         v-model="lenoirtimes"
@@ -20,6 +20,7 @@
         label="Your availability for Lenoir"
         chips
         deletable-chips
+        flat
         placeholder="ex: MonWedFri 1:25pm-2:00pm, Thur 6:05pm-8:00pm"
         solo
         multiple
@@ -35,6 +36,7 @@
           label="Your availability for Rams"
           chips
           deletable-chips
+          flat
           placeholder="SatSun 1:25pm-2:00pm"
           solo
           multiple
@@ -44,18 +46,22 @@
         </v-combobox>
 
     <h3>Your Contact Info</h3>
-    <p>Phone:</p>
-    <p>Email: </p>
+    <p>Phone: {{this.phone}}</p>
+    <p>Email: {{this.email}} </p>
     
     <h3>How you appear to others:</h3>
     <v-card>
       <v-card-title primary-title>
         <div>
-            <h3 class="headline mb-3"> Firstname Lastname</h3>
-            Sharing? 
-            <p>Phone: </p>
-            <p>Times: </p>
-            <v-btn class="light-blue lighten-4">Schedule Meeting Time</v-btn>
+            <h3 class="headline mb-3"> {{this.firstname}} {{this.lastname}} is 
+              <span v-if="this.sharing">sharing swipes</span>
+              <span v-if="this.sharing && this.requesting">, and </span>
+              <span v-if="this.requesting">requesting swipes</span>
+            </h3>
+            <p>Phone: {{this.phone}}</p>
+            <p v-if=this.lenoir>Lenoir Times: {{this.lenoirtimes}}</p>
+            <p v-if=this.rams>Ram's Times: {{this.ramstimes}}</p>
+            <v-btn dark depressed class="light-blue darken-3">Schedule Meeting Time</v-btn>
         </div>
       </v-card-title>
     </v-card>
@@ -73,10 +79,14 @@
         requesting: false,
         uid: firebase.auth().currentUser.uid,
         lenoir: false,
-        lenoirtimes: ["Tue 11:00am-11:30am"],
+        lenoirtimes: [],
         rams: false,
         ramstimes: [],
         loading: false,
+        firstname: "",
+        lastname: "",
+        phone: "", 
+        email: "",
       }
     },
 
@@ -111,7 +121,6 @@
       },
 
       updateRamsTimes() {
-          alert("ramstimes");
           db.collection('users').doc(firebase.auth().currentUser.uid).update({
           ramstimes: this.ramstimes
         });
@@ -141,8 +150,17 @@
           doc => {
             this.sharing = doc.data().sharing;
             this.requesting = doc.data().requesting;
+            this.lenoir = doc.data().lenoir;
+            this.rams = doc.data().rams;
+            this.lenoirtimes = doc.data().lenoirtimes;
+            this.ramstimes = doc.data().ramstimes;
+            this.firstname = doc.data().firstname;
+            this.lastname = doc.data().lastname;
+            this.phone = doc.data().phone;
+            this.email = doc.data().email;
           }
         ).catch(err => {
+            alert("something went wrong ://");
         })
       }
     }

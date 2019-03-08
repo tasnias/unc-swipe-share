@@ -30,7 +30,7 @@
     <v-toolbar color="light-blue darken-3" scroll-toolbar-off-screen flat dark app>
       <v-toolbar-side-icon v-on:click="drawer=!drawer" v-if="isLoggedIn"></v-toolbar-side-icon>
       
-      <v-toolbar-title to='/'>UNC Swipe Share</v-toolbar-title>
+      <v-toolbar-title><router-link to="/">-</router-link>UNC Swipe Share</v-toolbar-title>
       
       <v-spacer></v-spacer>
   

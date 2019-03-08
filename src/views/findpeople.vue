@@ -1,28 +1,40 @@
 <template>
-  <div id="findpeople">
-    <v-toolbar flat class="grey lighten-2">
-        <v-text-field
-            prepend-icon="search"
-            single-line>
-        </v-text-field>
-        <v-btn icon>
-            <v-icon>filter_list</v-icon>
-        </v-btn>
-    </v-toolbar>
+   <v-container>
+        <v-layout justify-center>
+          <v-flex
+            xs12
+            md10
+            lg8
+          >
+            <v-toolbar flat class="grey lighten-2">
+                <v-text-field
+                    prepend-icon="search"
+                    single-line>
+                </v-text-field>
+                <v-btn icon>
+                    <v-icon>filter_list</v-icon>
+                </v-btn>
+            </v-toolbar>
 
-    <v-card v-for="person in peoplelist" :key="person.email" flat>
-        <v-card-title primary-title>
-        <div>
-            <h3 class="headline mb-3"> {{ person.firstname }} {{person.lastname}}</h3>
-            Sharing? {{ person.sharing}} 
-            Requesting {{person.requesting}}
-            <p>Phone: {{person.phone}}</p>
-            <p>Times: {{person.lenoirtimes}}</p>
-            <v-btn class="light-blue lighten-4">Schedule Meeting Time</v-btn>
-        </div>
-        </v-card-title>
-    </v-card>
-  </div>  
+            <v-card v-for="person in peoplelist" :key="person.email" flat>
+                <v-card-title primary-title>
+                <div>
+                    <h3 class="headline mb-3"> {{person.firstname}} {{person.lastname}} is 
+                        <span v-if="person.sharing">sharing swipes</span>
+                        <span v-if="person.sharing && person.requesting">, and </span>
+                        <span v-if="person.requesting">requesting swipes</span>
+                    </h3>
+                    <p>Phone: {{person.phone}}</p>
+                    <p v-if="person.lenoir">Lenoir Times: {{person.lenoirtimes}}</p>
+                    <p v-if=person.rams>Ram's Times: {{person.ramstimes}}</p>
+                    <v-btn class="light-blue darken-3" dark depressed>Schedule Meeting Time</v-btn>
+                </div>
+                </v-card-title>
+                <v-divider/>
+            </v-card>
+          </v-flex>
+        </v-layout>
+   </v-container>
 </template>
 
 <script>

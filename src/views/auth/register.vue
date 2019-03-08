@@ -22,6 +22,8 @@
             <v-btn
               type="submit"
               v-on:click="register" 
+              large
+              depressed
               color="light-blue darken-3 white--text"
             >
               Submit
@@ -34,9 +36,10 @@
 
 <script>
   import firebase from 'firebase'
+  import db from '../../components/firebaseInit'
   export default {
     name: 'register',
-    data: function() {
+    data() {
       return {
         email: '',
         password: '',
@@ -44,18 +47,32 @@
     },
     methods: {
       register: function (e) {
+
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
           alert(`Account created for ${user.user.email}`)
+          db.collection('users').doc(user.user.uid).set({
+            email: user.user.email, 
+            sharing: true, 
+            requesting: true, 
+            lenoir: true,
+            rams: true, 
+            show: true, 
+            firstname: "First", 
+            lastname: "Last",
+            lenoirtimes: [], 
+            ramstimes: [],
+          })
           this.$router.push('/swipesettings')
-        },
-        () => {
-          
         },
         err => {
           alert(err.message)
         })
         e.preventDefault()
+      },
+
+      bool: validate() {
+
       }
     }
   }
