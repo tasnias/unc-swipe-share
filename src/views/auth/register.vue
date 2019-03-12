@@ -70,10 +70,6 @@
         })
         e.preventDefault()
       },
-
-      bool: validate() {
-
-      }
     }
   }
 </script>

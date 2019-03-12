@@ -1,19 +1,12 @@
 <template>
   <div id="swipesettings">
-    <v-progress-circular
-      indeterminate
-      :size="70"
-      color="primary"
-      v-if="loading"
-    ></v-progress-circular>
-
 
     <h3>Share a Swipe</h3>
-      <v-switch v-model="sharing" label="Share" @change="updateSharing" color="light-blue darken-2"></v-switch>
-      <v-switch v-model="requesting" label="Request" color="light-blue darken-2" @change="updateRequesting"></v-switch>
+      <v-switch v-model="sharing" label="Share" @change="updateDB(sharing, 'sharing')" color="light-blue darken-2"></v-switch>
+      <v-switch v-model="requesting" label="Request" color="light-blue darken-2" @change="updateDB(requesting, 'requesting')"></v-switch>
 
     <h3>I can swipe someone in at...</h3>
-      <v-checkbox label="Lenoir Dining Hall" v-model="lenoir" color="light-blue darken-3"></v-checkbox>
+      <v-checkbox label="Lenoir Dining Hall" v-model="lenoir" color="light-blue darken-3" @click="updateDB(lenoir, 'lenoir')"></v-checkbox>
       <v-combobox
         v-model="lenoirtimes"
         :items="items"
@@ -26,10 +19,10 @@
         multiple
         append-icon=""
         v-if="lenoir"
-        @change="updateLenoirTimes">
+        @change="updateDB(lenoirtimes, 'lenoirtimes')">
       </v-combobox>
 
-      <v-checkbox label="Ram's Dining Hall" v-model="rams" color="light-blue darken-3"></v-checkbox>
+      <v-checkbox label="Ram's Dining Hall" v-model="rams" color="light-blue darken-3" @click="updateDB(rams, 'rams')"></v-checkbox>
       <v-combobox
           v-model="ramstimes"
           :items="items"
@@ -42,7 +35,7 @@
           multiple
           append-icon=""
           v-if="rams"
-          @change="updateRamsTimes">
+          @change="updateDB(ramstimes, 'ramstimes')">
         </v-combobox>
 
     <h3>Your Contact Info</h3>
@@ -109,38 +102,18 @@
     },
 
     methods: {
-      updateSharing() {
-        db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          sharing: this.sharing
-        });
+      updateDB: function(local, fb) {
+        let update = {};
+        update[fb] = local;
+        db.collection('users').doc(firebase.auth().currentUser.uid).update(update);
 
-        let show = this.sharing || this.requesting;
-        db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          show: show
-        });
-      },
-
-      updateRamsTimes() {
+        //update if card is showing or not; also should not show if lenoirtimes & ramstimes are empty
+        if (fb === 'sharing' || fb ==='requesting') {
+          let show = this.sharing || this.requesting;
           db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          ramstimes: this.ramstimes
-        });
-      },
-
-      updateLenoirTimes() {
-        db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          lenoirtimes: this.lenoirtimes
-        });
-      },
-
-      updateRequesting() {
-        db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          requesting: this.requesting
-        });
-
-        let show = this.sharing || this.requesting;
-        db.collection('users').doc(firebase.auth().currentUser.uid).update({
-          show: show
-        });
+            show: show
+          });
+        }
       },
 
       getStatus() {
@@ -160,7 +133,7 @@
             this.email = doc.data().email;
           }
         ).catch(err => {
-            alert("something went wrong ://");
+            alert(err);
         })
       }
     }
