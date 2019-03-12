@@ -1,3 +1,2 @@
 # unc-swipe-share
-Branch Repository
-Use npm run serve to test
+https://unc-swipe-share.firebaseapp.com/
