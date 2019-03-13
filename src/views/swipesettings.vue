@@ -30,7 +30,7 @@
           chips
           deletable-chips
           flat
-          placeholder="SatSun 1:25pm-2:00pm"
+          placeholder="ex: SatSun 1:25pm-2:00pm"
           solo
           multiple
           append-icon=""
@@ -43,6 +43,7 @@
     <p>Email: {{this.email}} </p>
     
     <h3>How you appear to others:</h3>
+
     <v-card>
       <v-card-title primary-title>
         <div>
@@ -63,9 +64,14 @@
 
 <script>
   import db from '../components/firebaseInit'
+  import Person from '../components/person'
   import firebase from 'firebase'
   export default {
     name: 'swipesettings',
+    components: {
+      Person,
+    },
+
     data () {
       return {
         sharing: false,

@@ -11,41 +11,58 @@
                     prepend-icon="search"
                     single-line>
                 </v-text-field>
-                <v-btn icon>
+                <v-btn icon @click.stop="filtermenu=true">
                     <v-icon>filter_list</v-icon>
                 </v-btn>
             </v-toolbar>
 
-            <v-card v-for="person in peoplelist" :key="person.email" flat>
-                <v-card-title primary-title>
-                <div>
-                    <h3 class="headline mb-3"> {{person.firstname}} {{person.lastname}} is 
-                        <span v-if="person.sharing">sharing swipes</span>
-                        <span v-if="person.sharing && person.requesting">, and </span>
-                        <span v-if="person.requesting">requesting swipes</span>
-                    </h3>
-                    <p>Phone: {{person.phone}}</p>
-                    <p v-if="person.lenoir">Lenoir Times: {{person.lenoirtimes}}</p>
-                    <p v-if=person.rams>Ram's Times: {{person.ramstimes}}</p>
-                    <v-btn class="light-blue darken-3" dark depressed>Schedule Meeting Time</v-btn>
-                </div>
-                </v-card-title>
-                <v-divider/>
-            </v-card>
+            <Person v-for="person in peoplelist" :key="person.value.email" flat v-bind:person="person.value" :filter="person.filter"/>
+            
           </v-flex>
         </v-layout>
+        <v-bottom-sheet
+            v-model="filtermenu"
+        >
+        <v-card tile>
+            <v-card-title><h3>Filter by</h3></v-card-title>
+            <v-card-text>
+                <h4>Swipe Status</h4>
+                <v-checkbox label="People who are requesting" v-model="filters.requesting" color="light-blue darken-3" @click="filter(filters.requesting)"></v-checkbox>
+
+                <v-checkbox label="People who are sharing" v-model="filters.sharing" color="light-blue darken-3" @click="filter(filters.sharing)"></v-checkbox>
+                <h4>Location</h4>
+                <v-checkbox label="Lenoir" v-model="filters.lenoir" color="light-blue darken-3" @click="filter(filters.lenoir)"></v-checkbox>
+
+                <v-checkbox label="Ram's" v-model="filters.rams" color="light-blue darken-3" @click="filter(filters.rams)"></v-checkbox>
+            </v-card-text>
+        </v-card>
+        </v-bottom-sheet>
    </v-container>
 </template>
 
 <script>
     import db from '../components/firebaseInit'
     import firebase from 'firebase'
+    import Person from '../components/person'
     export default {
         name: 'findpeople',
+        components: {
+            Person,
+        },
         data () {
             return {
                 uid: firebase.auth().currentUser.uid,
                 peoplelist: [],
+                dialog: false,
+                datemenu: false,
+                timemenu: false,
+                filtermenu: false, 
+                filters: {
+                    requesting: true,
+                    sharing: true,
+                    lenoir: true, 
+                    rams: true,
+                }
             }
         },
         
@@ -54,23 +71,39 @@
         },
 
         methods: {
+            filter(category) {
+                if (!category) {
+                    for (var i = 0; i < this.peoplelist.length; i++) {
+                        if (this.peoplelist[i].value.requesting) {
+                                    this.peoplelist.splice(i, 1, {filter: true, value: this.peoplelist[i].value});
+                        }
+                    }
+                }
+                else if (category) {
+                    for (i = 0; i < this.peoplelist.length; i++) {
+                        if (this.peoplelist[i].value.requesting) {
+                                    this.peoplelist.splice(i, 1, {filter: false, value: this.peoplelist[i].value});
+                        }
+                    }
+                }
+            },
             getPeople(type, list) {
                 db.collection("users").where(type, "==", true).onSnapshot(querySnapshot => {
                     querySnapshot.docChanges().forEach(change => {
                         if (change.type === 'added') {
-                            list.push(change.doc.data());
+                            list.push({filter: false, value: change.doc.data()});
                         }
                         if (change.type === 'modified') {
                             for (var i = 0; i < list.length; i++) {
                                 if (list[i].email === change.doc.data().email) {
-                                    list.splice(i, 1, change.doc.data());
+                                    list.splice(i, 1, {filter: false, value: change.doc.data()});
                                     return;
                                 }
                             }
                         }
 
                         if (change.type === 'removed') {
-                            for (var i = 0; i < list.length; i++) {
+                            for (i = 0; i < list.length; i++) {
                                 if (list[i].email === change.doc.data().email) {
                                     list.splice(i, 1);
                                     return;

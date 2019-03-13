@@ -2,7 +2,7 @@
   <v-app id="inspire" >
     <v-content>
       <v-container>
-        <router-view/>
+        <router-view />
       </v-container>
     </v-content>
 

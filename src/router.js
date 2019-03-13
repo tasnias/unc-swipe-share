@@ -5,6 +5,7 @@ import Login from '@/views/auth/login'
 import Register from '@/views/auth/register'
 import Recover from '@/views/auth/recover'
 import FindPeople from '@/views/findpeople'
+import Activity from '@/views/activity'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -25,6 +26,14 @@ let router = new Router({
       path: '/',
       name: 'findpeople',
       component: FindPeople,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/activity',
+      name: 'activity',
+      component: Activity,
       meta: {
         requiresAuth: true
       }
