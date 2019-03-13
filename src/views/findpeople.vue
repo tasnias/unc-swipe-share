@@ -6,7 +6,7 @@
             md10
             lg8
           >
-            <v-toolbar flat class="grey lighten-2">
+            <v-toolbar class="grey lighten-3">
                 <v-text-field
                     prepend-icon="search"
                     single-line>
@@ -22,6 +22,7 @@
         </v-layout>
         <v-bottom-sheet
             v-model="filtermenu"
+            lazy
         >
         <v-card tile>
             <v-card-title><h3>Filter by</h3></v-card-title>
@@ -30,6 +31,8 @@
                 <v-checkbox label="People who are requesting" v-model="filters.requesting" color="light-blue darken-3" @click="filter(filters.requesting)"></v-checkbox>
 
                 <v-checkbox label="People who are sharing" v-model="filters.sharing" color="light-blue darken-3" @click="filter(filters.sharing)"></v-checkbox>
+
+
                 <h4>Location</h4>
                 <v-checkbox label="Lenoir" v-model="filters.lenoir" color="light-blue darken-3" @click="filter(filters.lenoir)"></v-checkbox>
 
@@ -92,6 +95,7 @@
                     querySnapshot.docChanges().forEach(change => {
                         if (change.type === 'added') {
                             list.push({filter: false, value: change.doc.data()});
+                            list[list.length - 1].value.id = change.doc.id;
                         }
                         if (change.type === 'modified') {
                             for (var i = 0; i < list.length; i++) {

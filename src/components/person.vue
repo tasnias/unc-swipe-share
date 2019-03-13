@@ -87,7 +87,7 @@
     </v-card>-->
     <div v-if="!filter">
           <br>
-    <v-card flat>
+    <v-card>
       <v-card-title>
         <h3 class="headline"> {{person.firstname}} {{person.lastname}} is 
                 <span v-if="person.sharing">sharing swipes</span>
@@ -100,29 +100,22 @@
         <p v-if="person.lenoir">Lenoir Availability: {{person.lenoirtimes}}</p>
             <p v-if=person.rams>Ram's Availability: {{person.ramstimes}}</p>
             <v-btn  v-if="person.sharing" class="light-blue darken-3" dark depressed  @click.stop="requestdialog = true">Request Swipe
-
             </v-btn>
 
-            <v-btn  v-if="person.requesting" class="light-blue darken-3" dark depressed  @click.stop="sharedialog = true">Share Swipe
-              
+            <v-btn  v-if="person.requesting" class="light-blue darken-3" dark depressed  @click.stop="sharedialog = true">Share Swipe 
             </v-btn>
-
-            <v-dialog
-                v-model="sharedialog"
-            >
-              <MeetingDialog title="Share a swipe with"
-                :person="person"/>
+            <MeetingDialog title="Share a swipe with"
+                :person="person"
+                v-bind:type="sharedialog"
+                @clicked="onClickChild"
+            />
+        
+            <MeetingDialog title="Request a swipe from"
+                v-bind:type="requestdialog"
+                :person="person"
+                @clicked="onClickChild"
+            />
                 
-            </v-dialog>
-
-            <v-dialog
-                v-model="requestdialog"
-            >
-              <MeetingDialog title="Request a swipe from"
-                :person="person"/>
-                
-            </v-dialog>
-
       </v-card-text>
     </v-card>
     </div>
@@ -145,5 +138,11 @@
       }
     },
 
+    methods: {
+        onClickChild() {
+            this.sharedialog = false;
+            this.requestdialog = false;
+        }
+    }
   }
 </script>

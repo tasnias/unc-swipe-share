@@ -1,7 +1,11 @@
 <template>
+    <v-dialog
+        v-model=type
+        persistent
+    >
     <v-card>
         <v-card-title>
-        {{title}} {{person.firstname}}
+        <h3>{{title}} {{person.firstname}}</h3>
         </v-card-title>
         <v-card-text>
              <v-text-field
@@ -24,7 +28,7 @@
         <v-btn
             color="gray"
             flat="flat"
-            @click="dialog = false"
+            @click="cancel()"
         >
             Cancel
         </v-btn>
@@ -89,32 +93,65 @@
         </v-btn>
         </v-card-actions>-->
     </v-card>
+    </v-dialog>
 </template>
 
 <script>
-  export default {
-    props: ['person', 'title'],
-    name: 'meetingdialog',
-    data() {
-      return {
-        datemenu: false, 
-        timemenu: false,
-        dialog: true,
-        date: null, 
-        time: null,
-      }
-    },
-
-    methods: {
-        sendmeeting() {
-            if (this.time != null) {
-                alert(this.time);
-
+    import db from '../components/firebaseInit'
+    import firebase from 'firebase'
+    export default {
+        props: ['person', 'title', 'type'],
+        name: 'meetingdialog',
+        data() {
+            return {
+                datemenu: false, 
+                timemenu: false,
+                dialog: true,
+                date: null, 
+                time: null,
+                uid: firebase.auth().currentUser.uid,
             }
-            else {
-                alert("Pick a date and time");
+        },
+
+        methods: {
+            sendmeeting() {
+                if (this.time != null) {
+                    alert(this.time);
+                    db.collection("users").doc(this.uid).collection("activity")
+                    .add({
+                        location: "idk",
+                        time: "time", 
+                        date: "date",
+                        type: this.$props.type,
+                        to: this.$props.person.email, 
+                        from: this.uid,
+                        message: "You sent a ",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
+                        action: "pending",
+                    });
+
+                    db.collection("users").doc(this.$props.person.id).collection("activity")
+                    .add({
+                        to: this.$props.person.email, 
+                        from: this.uid,
+                        message: "Sent you a",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
+                        location: "idk",
+                        time: "time", 
+                        date: "date",
+                        type: this.$props.type,
+                        action: "pending",
+                    })
+                    this.cancel();
+                }
+                else {
+                    alert("Pick a date and time");
+                }
+            },
+
+            cancel() {
+                this.$emit('clicked', false);
             }
         }
     }
-  }
 </script>
