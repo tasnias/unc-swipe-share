@@ -6,39 +6,39 @@
             md10
             lg8
           >
-            <v-toolbar class="grey lighten-3">
-                <v-text-field
-                    prepend-icon="search"
-                    single-line>
-                </v-text-field>
-                <v-btn icon @click.stop="filtermenu=true">
-                    <v-icon>filter_list</v-icon>
-                </v-btn>
-            </v-toolbar>
+            <v-hover>
+                <v-toolbar class="grey lighten-3" slot-scope="{ hover }" :class="`elevation-${hover ? 5 : 0}`">
+                    <v-text-field
+                        prepend-icon="search"
+                        single-line>
+                    </v-text-field>
+                    <v-btn icon @click.stop="filtermenu=true">
+                        <v-icon>filter_list</v-icon>
+                    </v-btn>
+                </v-toolbar>
+            </v-hover>
 
             <Person v-for="person in peoplelist" :key="person.value.email" flat v-bind:person="person.value" :filter="person.filter"/>
             
           </v-flex>
         </v-layout>
+
         <v-bottom-sheet
             v-model="filtermenu"
             lazy
         >
-        <v-card tile>
-            <v-card-title><h3>Filter by</h3></v-card-title>
-            <v-card-text>
-                <h4>Swipe Status</h4>
-                <v-checkbox label="People who are requesting" v-model="filters.requesting" color="light-blue darken-3" @click="filter(filters.requesting)"></v-checkbox>
+            <v-card tile>
+                <v-card-title><h3>Filter by</h3></v-card-title>
+                <v-card-text>
+                    <h4>Swipe Status</h4>
+                    <v-checkbox label="People who are requesting" v-model="filters.requesting" color="light-blue darken-3" @click="filter(filters.requesting)"></v-checkbox>
+                    <v-checkbox label="People who are sharing" v-model="filters.sharing" color="light-blue darken-3" @click="filter(filters.sharing)"></v-checkbox>
 
-                <v-checkbox label="People who are sharing" v-model="filters.sharing" color="light-blue darken-3" @click="filter(filters.sharing)"></v-checkbox>
-
-
-                <h4>Location</h4>
-                <v-checkbox label="Lenoir" v-model="filters.lenoir" color="light-blue darken-3" @click="filter(filters.lenoir)"></v-checkbox>
-
-                <v-checkbox label="Ram's" v-model="filters.rams" color="light-blue darken-3" @click="filter(filters.rams)"></v-checkbox>
-            </v-card-text>
-        </v-card>
+                    <h4>Location</h4>
+                    <v-checkbox label="Lenoir" v-model="filters.lenoir" color="light-blue darken-3" @click="filter(filters.lenoir)"></v-checkbox>
+                    <v-checkbox label="Ram's" v-model="filters.rams" color="light-blue darken-3" @click="filter(filters.rams)"></v-checkbox>
+                </v-card-text>
+            </v-card>
         </v-bottom-sheet>
    </v-container>
 </template>
@@ -65,7 +65,8 @@
                     sharing: true,
                     lenoir: true, 
                     rams: true,
-                }
+                }, 
+
             }
         },
         
